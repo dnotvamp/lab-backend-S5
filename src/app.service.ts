@@ -114,7 +114,10 @@ export class AppService {
         where: {
           id: user_id
         }
-      })
+      });
+
+      console.log('User found in auth service:', user);  
+
       if (user == null) throw new NotFoundException("User Tidak Ditemukan")
       return user
     } catch (err) {

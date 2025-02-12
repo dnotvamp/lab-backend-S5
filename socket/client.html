@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            background-image: url('sakamoto days.webp');
+        }
+        .chat-container {
+            width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .message {
+            padding: 5px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .message strong {
+            color: #333;
+        }
+        .message img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        input, button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            width: 100%;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Chat Room</h2>
+        <input id="username" type="text" placeholder="Masukkan nama">
+        <input id="room" type="text" placeholder="Masukkan username room">
+        <button onclick="joinRoom()">Join Room</button>
+        <button onclick="leaveRoom()">Leave Room</button>
+        
+        <div class="chat-box" id="chat"></div>
+        <input id="message" type="text" placeholder="Type a message">
+        <button onclick="sendMessage()">Send</button>
+        
+        <input type="file" id="imageInput" accept="image/*">
+        <button onclick="sendImage()">Send Image</button>
+    </div>
+
+    <script>
+        const socket = io('http://localhost:4000', { path: '/socket' });
+
+        function joinRoom() {
+            const username = document.getElementById('username').value;
+            const room = document.getElementById('room').value;
+            if (username && room) {
+                socket.emit('join-room', { username, room });
+                alert(`Joined room: ${room}`);
+            }
+        }
+
+        function leaveRoom() {
+            const username = document.getElementById('username').value;
+            const room = document.getElementById('room').value;
+            
+            if (username && room) {
+                socket.emit('leave-room', { username, room });
+                alert(`Left room: ${room}`);
+                
+                // Reset input fields
+                document.getElementById('username').value = '';
+                document.getElementById('room').value = '';
+                document.getElementById('message').value = '';
+                document.getElementById('imageInput').value = '';
+
+                // Clear chat box
+                document.getElementById('chat').innerHTML = '';
+            }
+        }
+
+
+        function sendMessage() {
+            const username = document.getElementById('username').value;
+            const room = document.getElementById('room').value;
+            const message = document.getElementById('message').value;
+            if (username && room && message) {
+                socket.emit('chat-room', { username, room, message });
+                document.getElementById('message').value = '';
+            }
+        }
+
+        function sendImage() {
+            const username = document.getElementById('username').value;
+            const room = document.getElementById('room').value;
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+            
+            if (username && room && file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    socket.emit('chat-image', { username, room, image: event.target.result });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function scrollToBottom() {
+            const chat = document.getElementById('chat');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        socket.on('room-message', (data) => {
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `<div class="message"><strong>${data.username}:</strong> ${data.message}</div>`;
+            scrollToBottom();
+        });
+
+        socket.on('room-image', (data) => {
+            const chat = document.getElementById('chat');
+            chat.innerHTML += `<div class="message"><strong>${data.username}:</strong><br><img src="${data.image}"></div>`;
+            scrollToBottom();
+        });
+    </script>
+</body>
+</html>
