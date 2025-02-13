@@ -3,20 +3,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import PrismaService from './prisma';
 import { JwtModule } from '@nestjs/jwt';
-import { ProfileModule } from './profile/profile.module';
-import { MahasiswaProfileModule } from './mahasiswa-profile/mahasiswa-profile.module';
-import { ChatModule } from './chat/chat.module';
 
+import { ProfileService } from './profile/profile.service';
+import { ProfileController } from './profile/profile.controller';
+import { ProfileModule } from './profile/profile.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: "sdfsghttyu45etgerte4r34fe"
+      secret: "dnotvamp"
     }),
     ProfileModule,
-    MahasiswaProfileModule,
-    ChatModule],
+    ChatModule
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
-export class AppModule { }
+export class AppModule {}

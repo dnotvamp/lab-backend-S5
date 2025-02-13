@@ -13,21 +13,26 @@
             align-items: center;
             height: 100vh;
             background-color: #f4f4f4;
-            background-image: url('sakamoto days.webp');
         }
         .chat-container {
-            width: 400px;
+            width: 600px;
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
-        .chat-box {
+        .chat-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-box, .image-box {
+            flex: 1;
             height: 300px;
             overflow-y: auto;
             border: 1px solid #ccc;
             padding: 10px;
-            margin-bottom: 10px;
             border-radius: 5px;
             background: #fafafa;
         }
@@ -70,7 +75,11 @@
         <button onclick="joinRoom()">Join Room</button>
         <button onclick="leaveRoom()">Leave Room</button>
         
-        <div class="chat-box" id="chat"></div>
+        <div class="chat-wrapper">
+            <div class="chat-box" id="chat"></div>
+            <div class="image-box" id="images"></div>
+        </div>
+        
         <input id="message" type="text" placeholder="Type a message">
         <button onclick="sendMessage()">Send</button>
         
@@ -98,17 +107,14 @@
                 socket.emit('leave-room', { username, room });
                 alert(`Left room: ${room}`);
                 
-                // Reset input fields
                 document.getElementById('username').value = '';
                 document.getElementById('room').value = '';
                 document.getElementById('message').value = '';
                 document.getElementById('imageInput').value = '';
-
-                // Clear chat box
                 document.getElementById('chat').innerHTML = '';
+                document.getElementById('images').innerHTML = '';
             }
         }
-
 
         function sendMessage() {
             const username = document.getElementById('username').value;
@@ -135,21 +141,21 @@
             }
         }
 
-        function scrollToBottom() {
-            const chat = document.getElementById('chat');
-            chat.scrollTop = chat.scrollHeight;
+        function scrollToBottom(id) {
+            const element = document.getElementById(id);
+            element.scrollTop = element.scrollHeight;
         }
 
         socket.on('room-message', (data) => {
             const chat = document.getElementById('chat');
             chat.innerHTML += `<div class="message"><strong>${data.username}:</strong> ${data.message}</div>`;
-            scrollToBottom();
+            scrollToBottom('chat');
         });
 
         socket.on('room-image', (data) => {
-            const chat = document.getElementById('chat');
-            chat.innerHTML += `<div class="message"><strong>${data.username}:</strong><br><img src="${data.image}"></div>`;
-            scrollToBottom();
+            const images = document.getElementById('images');
+            images.innerHTML += `<div class="message"><strong>${data.username}:</strong><br><img src="${data.image}"></div>`;
+            scrollToBottom('images');
         });
     </script>
 </body>

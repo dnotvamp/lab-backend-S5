@@ -1,57 +1,63 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import PrismaService from '../prisma';  
+import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
-import { extname } from 'path';
-import { join } from 'path'; 
+import { extname, join } from 'path';
+import PrismaService from 'src/prisma';
+
 
 @Injectable()
 export class ProfileService {
-    constructor(private readonly prisma: PrismaService) { }  
+    constructor(private readonly prisma: PrismaService) { }
 
-    async uploadFile(file: Express.Multer.File, user_id: number) {
-        const user = await this.prisma.user.findFirst({
-            where: { id: user_id },
-        });
+    async uploadFile(file: Express.Multer.File, nim: string) {
+        try {
+            const mahasiswa = await this.prisma.mahasiswa.findUnique({
+                where: { nim },
+            });
 
-        if (!user) throw new NotFoundException("Tidak Menemukan User");
+            if (!mahasiswa) throw new NotFoundException("Tidak Menemukan Mahasiswa");
 
-        if (user.foto_profile) {
-            const filePath = join(process.cwd(), 'uploads', user.foto_profile);
-            if (existsSync(filePath)) {
-                rmSync(filePath);  
+            if (mahasiswa.foto_profile) {
+                const filePath = join(process.cwd(), 'uploads', mahasiswa.foto_profile);
+                if (existsSync(filePath)) {
+                    rmSync(filePath);
+                }
             }
+
+            const uploadPath = join(process.cwd(), 'uploads');
+            if (!existsSync(uploadPath)) {
+                mkdirSync(uploadPath);
+            }
+
+            const fileExt = extname(file.originalname);
+            const baseFilename = mahasiswa.nim;
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            const filename = `${baseFilename}-${uniqueSuffix}${fileExt}`;
+            const filePath = join(uploadPath, filename);
+
+            writeFileSync(filePath, file.buffer);
+
+            await this.prisma.mahasiswa.update({
+                where: { nim },
+                data: { foto_profile: filename },
+            });
+
+            return { filename, path: filePath };
+        } catch (error) {
+            throw new InternalServerErrorException("Terjadi kesalahan saat mengunggah file");
         }
-
-        const uploadPath = join(process.cwd(), 'uploads');
-        if (!existsSync(uploadPath)) {
-            mkdirSync(uploadPath);  
-        }
-
-        const fileExt = extname(file.originalname);  
-        const baseFilename = user.username; 
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);  
-        const filename = `${baseFilename}-${uniqueSuffix}${fileExt}`;  
-        const filePath = join(uploadPath, filename);  
-
-        writeFileSync(filePath, file.buffer);  
-
-        await this.prisma.user.update({
-            where: { id: user_id },
-            data: { foto_profile: filename },  
-        });
-
-        return { filename, path: filePath };  
     }
 
-    async sendMyFotoProfile(user_id: number) {
-        const user = await this.prisma.user.findFirst({
-            where: {
-                id: user_id  
-            }
-        });
+    async sendMyFotoProfile(nim: string) {
+        try {
+            const mahasiswa = await this.prisma.mahasiswa.findUnique({
+                where: { nim },
+            });
 
-        if (!user) throw new NotFoundException("User tidak ditemukan");
+            if (!mahasiswa) throw new NotFoundException("Mahasiswa tidak ditemukan");
 
-        return user.foto_profile;  
+            return mahasiswa.foto_profile;
+        } catch (error) {
+            throw new InternalServerErrorException("Terjadi kesalahan saat mengambil foto profil");
+        }
     }
 }
