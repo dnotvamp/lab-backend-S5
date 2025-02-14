@@ -658,7 +658,7 @@ File ini merupakan titik masuk utama untuk aplikasi NestJS. Di dalamnya, aplikas
    - Menyediakan rute **`/api-docs`** yang digunakan untuk mengakses dokumentasi API secara interaktif melalui Swagger UI.
 
 #### c. **Menjalankan Aplikasi**
-1. **`await app.listen(process.env.PORT ?? 4000)`**:
+1. **`await app.listen(process.env.PORT ?? 3000)`**:
    - Menjalankan aplikasi pada port yang ditentukan oleh variabel lingkungan `PORT`, atau default ke `3000` jika tidak ada port yang ditentukan.
 ---
 ### 19. `src/user.decorator.ts`
@@ -788,8 +788,8 @@ graph TD
 
 4. **Akses API di:**
    ```sh
-   http://localhost:4000
-   http://localhost:4000/api-docs  --> Swagger
+   http://localhost:3000
+   http://localhost:3000/api-docs  --> Swagger
    ```
 
 
