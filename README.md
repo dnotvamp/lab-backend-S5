@@ -9,10 +9,6 @@ Berikut ini adalah struktur proyek **Lab-NestJS**:
 📂prisma/
 │   ├── prisma.schema
 📂socket/
-📂public/
-│   ├── 🟨app.js
-│   ├── 🟧index.html
-│   ├── 🟦styles.css
 📂src/
 │   ├── 📂chat/
 │   │   ├── chat.gateaway.spec.ts
