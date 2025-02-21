@@ -659,8 +659,8 @@ Dalam skema ini:
 
 4. **Mengakses API**  
    Setelah server berjalan, API dapat diakses melalui:  
-   - **Endpoint utama:** `http://localhost:3000`  
-   - **Dokumentasi Swagger:** `http://localhost:3000/api-docs`  
+   - **Endpoint utama:** `http://localhost:4000`  
+   - **Dokumentasi Swagger:** `http://localhost:4000/api-docs`  
 
 ---
 
