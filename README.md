@@ -463,7 +463,7 @@ File ini merupakan titik masuk utama aplikasi **NestJS**. Di dalamnya, aplikasi 
 
 ### **c. Menjalankan Aplikasi**  
 
-1. **`await app.listen(process.env.PORT ?? 3000)`**  
+1. **`await app.listen(process.env.PORT ?? 4000)`**  
    - Menjalankan aplikasi di **port yang ditentukan** dalam `.env`, atau default ke `3000`.  
 
 ---
