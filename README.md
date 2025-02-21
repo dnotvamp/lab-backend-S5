@@ -7,59 +7,60 @@ Proyek Lab Backend ini merupakan implementasi sistem backend menggunakan framewo
 
 Berikut ini adalah struktur proyek **Lab-NestJS**:
 ```
-📦lab-nestjs/
-├── 📂node_modules/
-├── 📂prisma/
+📂prisma/
 │   ├── prisma.schema
-├── 📂public/
+📂socket/
+📂public/
 │   ├── 🟨app.js
 │   ├── 🟧index.html
 │   ├── 🟦styles.css
-├── 📂src/
+📂src/
 │   ├── 📂chat/
-│   |   |-- chat.gateaway.spec.ts
-│   |   |-- chat.gateaway.ts
-│   |   |-- chat.module.ts
-│   |   |-- chat.service.spec.ts
-│   |   |-- chat.service.ts
+│   │   ├── chat.gateaway.spec.ts
+│   │   ├── chat.gateaway.ts
+│   │   ├── chat.module.ts
+│   │   ├── chat.service.spec.ts
+│   │   ├── chat.service.ts
+│   ├── 📂decorator/
+│   │   ├── user.decorator.ts
 │   ├── 📂dto/
-│   |   |-- create-mahasiswa.dto.ts
-│   |   |-- register-user.dto.ts
+│   │   ├── create-mahasiswa.dto.ts
+│   │   ├── register-user.dto.ts
 │   ├── 📂entity/
-│   |   |-- user.entity.ts
+│   │   ├── user.entity.ts
+│   ├── 📂guard/
+│   │   ├── auth.guard.ts
 │   ├── 📂mahasiswa-profile/
-│   |   |-- mahasiswa-profile.controller.spec.ts
-│   |   |-- mahasiswa-profile.controller.ts
-│   |   |-- mahasiswa-profile.module.ts
-│   |   |-- mahasiswa-profile.service.spec.ts
-│   |   |-- mahasiswa-profile.service.ts
+│   │   ├── mahasiswa-profile.controller.spec.ts
+│   │   ├── mahasiswa-profile.controller.ts
+│   │   ├── mahasiswa-profile.module.ts
+│   │   ├── mahasiswa-profile.service.spec.ts
+│   │   ├── mahasiswa-profile.service.ts
 │   ├── 📂profile/
-│   |   |-- profile.controller.spec.ts
-│   |   |-- profile.controller.ts
-│   |   |-- profile.module.ts
-│   |   |-- profile.service.spec.ts
-│   |   |-- profile.service.ts
-│   |-- app.controller.spec.ts
-│   |-- app.controller.ts
-│   |-- app.module.ts
-│   |-- app.service.ts
-│   |-- auth.guard.ts
-│   |-- auth.module.ts
-│   |-- 🟦main.ts
-│   |-- 🟦prisma.ts
-│   |-- 🟦user.decorator.ts
-├── 📂test/
-├── 📂uploads/
-├── .env
-├── .gitignore
-├── .prettierrc
-├── nest-cli.json
-├── package-lock.json 
-├── package.json 
-├── README.md 
-├── tsconfig.build.json 
-├── tsconfig.json 
-```
+│   │   ├── profile.controller.spec.ts
+│   │   ├── profile.controller.ts
+│   │   ├── profile.module.ts
+│   │   ├── profile.service.spec.ts
+│   │   ├── profile.service.ts
+│   ├── app.controller.spec.ts
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   ├── auth.module.ts
+│   ├── 🟦main.ts
+│   ├── 🟦prisma.ts
+📂test/
+📂uploads/
+.eslintrc.js
+.gitignore
+.prettierrc
+README.md
+nest-cli.json
+package-lock.json
+package.json
+tsconfig.build.json
+tsconfig.json
+
 
 ---
 ## 3. TEKNOLOGI YANG DIGUNAKAN
